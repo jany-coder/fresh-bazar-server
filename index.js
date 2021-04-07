@@ -12,16 +12,20 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
+
+
+
 app.get('/', (req, res) => {
 res.send('Hello World!')
 })
 
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.swu9d.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.5dt4u.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 client.connect(err => {
     console.log('connection err', err)
-  const eventCollection = client.db("volunteer").collection("events");
-  
+  const eventCollection = client.db("freshBazar").collection("products");
+  console.log('Database connected')
     app.get('/events', (req, res) => {
         eventCollection.find()
         .toArray((err, items) => {
@@ -29,7 +33,7 @@ client.connect(err => {
         })
     })
 
-  app.post('/addEvent', (req, res) => {
+  app.post('/addProducts', (req, res) => {
       const newEvent = req.body;
       console.log('adding new event: ', newEvent)
       eventCollection.insertOne(newEvent)
