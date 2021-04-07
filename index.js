@@ -26,7 +26,13 @@ client.connect(err => {
     console.log('connection err', err)
   const eventCollection = client.db("freshBazar").collection("products");
   console.log('Database connected')
-    app.get('/events', (req, res) => {
+
+  app.post('/addBooking',(req, res) => {
+    const newBooking = req.body;
+    console.log(newBooking);
+  })
+    
+  app.get('/events', (req, res) => {
         eventCollection.find()
         .toArray((err, items) => {
             res.send(items)
@@ -49,6 +55,16 @@ client.connect(err => {
       eventCollection.findOneAndDelete({_id: id})
       .then(documents => res.send(!!documents.value))
   })
+
+  app.get('/product/:id', (req, res) => {
+    eventCollection.find({_id: ObjectID(req.params.id)})
+    .toArray ((err, documents) =>{
+      res.send(documents);
+    })
+  })
+
+
+ 
 
 //   client.close();
 });
