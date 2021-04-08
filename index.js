@@ -29,6 +29,10 @@ client.connect(err => {
 
   app.post('/addBooking',(req, res) => {
     const newBooking = req.body;
+    eventCollection.insertOne(newBooking)
+    .then(result =>{
+      res.send(result.insertedCount > 0);
+    })
     console.log(newBooking);
   })
     
@@ -39,15 +43,6 @@ client.connect(err => {
         })
     })
 
-  app.post('/addProducts', (req, res) => {
-      const newEvent = req.body;
-      console.log('adding new event: ', newEvent)
-      eventCollection.insertOne(newEvent)
-      .then(result => {
-          console.log('inserted count', result.insertedCount);
-          res.send(result.insertedCount > 0)
-      })
-  })
 
   app.delete('deleteEvent/:id', (req, res) => {
       const id = ObjectID(req.params.id);
@@ -56,10 +51,19 @@ client.connect(err => {
       .then(documents => res.send(!!documents.value))
   })
 
-  app.get('/product/:id', (req, res) => {
-    eventCollection.find({_id: ObjectID(req.params.id)})
-    .toArray ((err, documents) =>{
-      res.send(documents);
+  // app.get('/product/:id', (req, res) => {
+  //   eventCollection.find({_id: ObjectID(req.params.id)})
+  //   .toArray ((err, documents) =>{
+  //     res.send(documents);
+  //   })
+  // })
+
+  app.get('/bookings', (req, res) =>{
+    //console.log(req.query.email);
+    eventCollection.find({})
+    .toArray((err, documents) =>{
+      res.send(documents)
+      
     })
   })
 
